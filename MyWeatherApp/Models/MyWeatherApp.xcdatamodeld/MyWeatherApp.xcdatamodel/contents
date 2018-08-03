@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="City" representedClassName="City" syncable="YES">
+        <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cityCoord" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCityCoord" inverseName="city" inverseEntity="CurrentCityCoord" syncable="YES"/>
+    </entity>
+    <entity name="Country" representedClassName="Country" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="CurrentCity" representedClassName="CurrentCity" syncable="YES">
+        <attribute name="base" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="clouds" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="cod" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rain" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="snow" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="currentCityCoord" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCityCoord" inverseName="currentCity" inverseEntity="CurrentCityCoord" syncable="YES"/>
+        <relationship name="currentCityMain" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCityMain" inverseName="currentCity" inverseEntity="CurrentCityMain" syncable="YES"/>
+        <relationship name="currentCitySys" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCitySys" inverseName="currentCity" inverseEntity="CurrentCitySys" syncable="YES"/>
+        <relationship name="currentCityWeatherInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCityWeatherInfo" inverseName="currentCity" inverseEntity="CurrentCityWeatherInfo" syncable="YES"/>
+        <relationship name="currentCityWind" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCityWind" inverseName="currentCity" inverseEntity="CurrentCityWind" syncable="YES"/>
+    </entity>
+    <entity name="CurrentCityCoord" representedClassName="CurrentCityCoord" syncable="YES">
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="city" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="City" inverseName="cityCoord" inverseEntity="City" syncable="YES"/>
+        <relationship name="currentCity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCity" inverseName="currentCityCoord" inverseEntity="CurrentCity" syncable="YES"/>
+    </entity>
+    <entity name="CurrentCityMain" representedClassName="CurrentCityMain" syncable="YES">
+        <attribute name="grndLevel" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="seaLevel" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="temp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tempMax" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tempMin" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="currentCity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCity" inverseName="currentCityMain" inverseEntity="CurrentCity" syncable="YES"/>
+    </entity>
+    <entity name="CurrentCitySys" representedClassName="CurrentCitySys" syncable="YES">
+        <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="message" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="sunrise" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="sunset" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="currentCity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCity" inverseName="currentCitySys" inverseEntity="CurrentCity" syncable="YES"/>
+    </entity>
+    <entity name="CurrentCityWeatherInfo" representedClassName="CurrentCityWeatherInfo" syncable="YES">
+        <attribute name="discription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="main" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="currentCity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCity" inverseName="currentCityWeatherInfo" inverseEntity="CurrentCity" syncable="YES"/>
+    </entity>
+    <entity name="CurrentCityWind" representedClassName="CurrentCityWind" syncable="YES">
+        <attribute name="degrees" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="currentCity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentCity" inverseName="currentCityWind" inverseEntity="CurrentCity" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="City" positionX="-18" positionY="117" width="128" height="105"/>
+        <element name="CurrentCity" positionX="-63" positionY="-18" width="128" height="240"/>
+        <element name="CurrentCityCoord" positionX="-54" positionY="-9" width="128" height="105"/>
+        <element name="CurrentCityMain" positionX="18" positionY="108" width="128" height="165"/>
+        <element name="CurrentCitySys" positionX="0" positionY="54" width="128" height="150"/>
+        <element name="CurrentCityWeatherInfo" positionX="36" positionY="135" width="128" height="120"/>
+        <element name="CurrentCityWind" positionX="-36" positionY="18" width="128" height="90"/>
+        <element name="Country" positionX="-9" positionY="117" width="128" height="75"/>
+    </elements>
+</model>
