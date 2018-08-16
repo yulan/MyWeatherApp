@@ -11,7 +11,7 @@ import UIKit
 import Reachability
 import CoreLocation
 
-class HomeViewController: UIViewController {
+class HomeViewController: BaseViewController {
 
     // MARK: - Typealias
     
@@ -40,14 +40,18 @@ class HomeViewController: UIViewController {
         static var avatarSectionCellHeight: CGFloat                 =  148.0
         
         static let showSettingViewControllerSegueID: String         = "showSettingViewControllerSegueID"
+        static let showSearchCountryListViewControllerID: String  = "showSearchCountryListViewControllerID"
     }
     
     // MARK: Properties
     
     fileprivate var sectionsAvailable: [Section] = []
-    @IBOutlet weak var tableView: UITableView!
     var currentCity: CurrentCity?
     let reachability: Reachability = Reachability()!
+    
+    // MARK: IBOutlet
+    
+    @IBOutlet weak var tableView: UITableView!
     
     // MARK: IBAction
     
@@ -55,16 +59,27 @@ class HomeViewController: UIViewController {
         self.performSegue(withIdentifier: LocalConstants.showSettingViewControllerSegueID, sender: nil)
     }
     
+    @IBAction func searchButtonAction() {
+        self.performSegue(withIdentifier: LocalConstants.showSearchCountryListViewControllerID, sender: nil)
+    }
+    
     // MARK: Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.title = "Météo Paris"
+        
+        self.navigationItem.title = "hello"
+        
+        self.isTabBarTranparent = true
+        
         //PreprocessingCityList().loadJson()
-        //PreprocessingCountryList().loadJson()
+        PreprocessingCountryList().loadJson()
         //let language = LanguageManager.sharedInstanc.
         let completion: (Bool, String?) -> Void = { (isZipCode, zipCode) in
             print("zipcode: \(zipCode ?? "")")
+            if let country: Country = Country.mr_findFirst(byAttribute: "code", withValue: zipCode as Any), let countryName = country.name {
+                self.navigationItem.title = countryName
+            }
             let fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: zipCode, cityId: nil, lat: nil, lon: nil, zipCode: "93500", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: false)
             self.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct)
         }
@@ -88,6 +103,7 @@ class HomeViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: .reachabilityChanged, object: self.reachability)
         
     }
+
     
     // MARK: reachability Changed
     
@@ -212,6 +228,10 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDelegate {
     // MARK: UITableViewDelegate Protocol
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        let sectionItem: Section = self.sectionsAvailable[indexPath.section]
 //        let rowItem: RowItem = self.rowsForSection(sectionItem)[indexPath.row]
@@ -224,7 +244,7 @@ extension HomeViewController: UITableViewDelegate {
 //        default:
 //            return Constants.defaultDestinationTableViewCellHeight
 //        }
-        return 90
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -247,14 +267,15 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     fileprivate func numberOfRowForSection(_ section: Section) -> Int {
-        return self.rowsForSection(section).count
+        //return self.rowsForSection(section).count
+        return 7
     }
 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sectionItem: Section = self.sectionsAvailable[indexPath.section]
-        let rowItem: RowItem = self.rowsForSection(sectionItem)[indexPath.row]
-        
+        //let rowItem: RowItem = self.rowsForSection(sectionItem)[indexPath.row]
+        let rowItem: RowItem = self.rowsForSection(sectionItem)[0]
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: rowItem.cellID, for: indexPath)
       
         self.configureCell(cell as! CustomTitleTableViewCell, withItem: rowItem)

@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     
         self.configureCoreDataStack()
+        
         return true
     }
 
@@ -97,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ = CoreDataApplicationContext.rootFetchContext
         _ = CoreDataApplicationContext.rootSaveContext
     }
-    
+
     fileprivate func configureNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.languageDidChange), name: NSNotification.Name(rawValue: LanguageManager.Constants.appLanguageDidChangedNotification), object: nil)
     }

@@ -33,6 +33,7 @@
 		3F48707920FCED5A00D51AD8 /* CurrentCityMain+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F48706D20FCED5A00D51AD8 /* CurrentCityMain+CoreDataClass.swift */; };
 		3F48707B20FCF0F500D51AD8 /* CoreDataStructModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F48707A20FCF0F400D51AD8 /* CoreDataStructModelProtocol.swift */; };
 		3F48707D20FCF1AD00D51AD8 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F48707C20FCF1AD00D51AD8 /* CoreDataManager.swift */; };
+		3F75E34C21183FE700E95023 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F75E34B21183FE700E95023 /* BaseViewController.swift */; };
 		3F9CF36B20FE24CD0052FD90 /* Alamofire+CoreDataSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9CF36A20FE24CD0052FD90 /* Alamofire+CoreDataSerializable.swift */; };
 		3FC2F9532110594600F8245D /* Country+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC2F9512110594500F8245D /* Country+CoreDataClass.swift */; };
 		3FC2F9542110594600F8245D /* Country+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC2F9522110594600F8245D /* Country+CoreDataProperties.swift */; };
@@ -57,6 +58,8 @@
 		3FD6382321060A8500E4C375 /* Numeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6382221060A8500E4C375 /* Numeric.swift */; };
 		3FD6382521060AB100E4C375 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6382421060AB100E4C375 /* String+Additions.swift */; };
 		3FD6382B21060D1900E4C375 /* HTTPManager+CurrentCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6382A21060D1900E4C375 /* HTTPManager+CurrentCity.swift */; };
+		3FDB8A5421148587009D1E73 /* BaseNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB8A5321148587009D1E73 /* BaseNavigationViewController.swift */; };
+		3FDDCF852123084300135D12 /* SearchCountryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDDCF842123084300135D12 /* SearchCountryListViewController.swift */; };
 		549AA2F9A963F79CAD2C0AAA /* Pods_MyWeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29FD2833FE04887333252DD9 /* Pods_MyWeatherApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -114,6 +117,7 @@
 		3F48706D20FCED5A00D51AD8 /* CurrentCityMain+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CurrentCityMain+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3F48707A20FCF0F400D51AD8 /* CoreDataStructModelProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStructModelProtocol.swift; sourceTree = "<group>"; };
 		3F48707C20FCF1AD00D51AD8 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		3F75E34B21183FE700E95023 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		3F9CF36A20FE24CD0052FD90 /* Alamofire+CoreDataSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alamofire+CoreDataSerializable.swift"; sourceTree = "<group>"; };
 		3FC2F9512110594500F8245D /* Country+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Country+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3FC2F9522110594600F8245D /* Country+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Country+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -138,6 +142,8 @@
 		3FD6382221060A8500E4C375 /* Numeric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Numeric.swift; sourceTree = "<group>"; };
 		3FD6382421060AB100E4C375 /* String+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Additions.swift"; sourceTree = "<group>"; };
 		3FD6382A21060D1900E4C375 /* HTTPManager+CurrentCity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HTTPManager+CurrentCity.swift"; sourceTree = "<group>"; };
+		3FDB8A5321148587009D1E73 /* BaseNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationViewController.swift; sourceTree = "<group>"; };
+		3FDDCF842123084300135D12 /* SearchCountryListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCountryListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -296,6 +302,15 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		3F75E34A21183FE700E95023 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				3FDB8A5321148587009D1E73 /* BaseNavigationViewController.swift */,
+				3F75E34B21183FE700E95023 /* BaseViewController.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		3F9CF36320FE1C540052FD90 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +343,8 @@
 		3FC616C82108C15600E0396A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				3FF363CD211DD1840015BF30 /* CountryList */,
+				3F75E34A21183FE700E95023 /* Base */,
 				3F4367BC211090D2005A3B04 /* Setting */,
 				3F486FE020FCC79700D51AD8 /* Home */,
 			);
@@ -437,6 +454,14 @@
 				3FD6382A21060D1900E4C375 /* HTTPManager+CurrentCity.swift */,
 			);
 			path = services;
+			sourceTree = "<group>";
+		};
+		3FF363CD211DD1840015BF30 /* CountryList */ = {
+			isa = PBXGroup;
+			children = (
+				3FDDCF842123084300135D12 /* SearchCountryListViewController.swift */,
+			);
+			path = CountryList;
 			sourceTree = "<group>";
 		};
 		855EAE5E26F819069264D318 /* Pods */ = {
@@ -661,6 +686,8 @@
 				3FD6382B21060D1900E4C375 /* HTTPManager+CurrentCity.swift in Sources */,
 				3F4367BB21105F3A005A3B04 /* PreprocessingCountryList.swift in Sources */,
 				3F4367BE21109117005A3B04 /* SettingViewController.swift in Sources */,
+				3F75E34C21183FE700E95023 /* BaseViewController.swift in Sources */,
+				3FDDCF852123084300135D12 /* SearchCountryListViewController.swift in Sources */,
 				3FD638022105E09600E4C375 /* Array+Query.swift in Sources */,
 				3FD6381F210605A000E4C375 /* HTTPRequest.swift in Sources */,
 				3FD6381D210605A000E4C375 /* HTTPRequestHelper.swift in Sources */,
@@ -692,6 +719,7 @@
 				3F48707720FCED5A00D51AD8 /* CurrentCitySys+CoreDataProperties.swift in Sources */,
 				3F486FAE20FCC41D00D51AD8 /* AppDelegate.swift in Sources */,
 				3FC2F9532110594600F8245D /* Country+CoreDataClass.swift in Sources */,
+				3FDB8A5421148587009D1E73 /* BaseNavigationViewController.swift in Sources */,
 				3FCB49FE210B467000A02716 /* LanguageManager.swift in Sources */,
 				3FD63820210605A000E4C375 /* HTTPManager.swift in Sources */,
 				3F9CF36B20FE24CD0052FD90 /* Alamofire+CoreDataSerializable.swift in Sources */,
