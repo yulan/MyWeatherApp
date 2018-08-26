@@ -70,11 +70,7 @@ extension SearchCountryListViewController: UITableViewDataSource {
 
 extension SearchCountryListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
-            self.countryListfilted = self.countryList
-        } else {
-            self.countryListfilted = self.fetchCountiesForQuery(searchText.lowercased())
-        }
+        self.countryListfilted = self.fetchCountiesForQuery(searchText.lowercased())
         self.tableView.reloadData()
     }
     
@@ -83,7 +79,7 @@ extension SearchCountryListViewController: UISearchBarDelegate {
     }
     
     fileprivate func fetchCountiesForQuery(_ query: String?) -> [Country] {
-        guard let query = query, !query.isEmpty else { return [] }
+        guard let query = query, !query.isEmpty else { return self.countryList }
         let defaultContext: NSManagedObjectContext = NSManagedObjectContext.mr_rootSaving()
         let regex = String(format: ".*\\b%@.*", NSRegularExpression.escapedPattern(for: query))
         let predicate = NSPredicate(format: "(code BEGINSWITH[c] %@) OR (name MATCHES[cd] %@)", query, regex)

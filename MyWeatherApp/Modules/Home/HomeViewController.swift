@@ -47,6 +47,7 @@ class HomeViewController: BaseViewController {
     
     fileprivate var sectionsAvailable: [Section] = []
     var currentCity: CurrentCity?
+    var fiveDaysWeather: FewDaysWeather?
     let reachability: Reachability = Reachability()!
     
     // MARK: IBOutlet
@@ -75,15 +76,21 @@ class HomeViewController: BaseViewController {
         //PreprocessingCityList().loadJson()
         PreprocessingCountryList().loadJson()
         //let language = LanguageManager.sharedInstanc.
-        let completion: (Bool, String?) -> Void = { (isZipCode, zipCode) in
-            print("zipcode: \(zipCode ?? "")")
-            if let country: Country = Country.mr_findFirst(byAttribute: "code", withValue: zipCode as Any), let countryName = country.name {
-                self.navigationItem.title = countryName
-            }
-            let fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: zipCode, cityId: nil, lat: nil, lon: nil, zipCode: "93500", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: false)
-            self.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct)
-        }
-        self.getCountryCodeByZipCode("93500", completion: completion)
+//        let completion: (Bool, String?) -> Void = { (isZipCode, zipCode) in
+//            print("zipcode: \(zipCode ?? "")")
+//            if let country: Country = Country.mr_findFirst(byAttribute: "code", withValue: zipCode as Any), let countryName = country.name {
+//                self.navigationItem.title = countryName
+//            }
+//            let fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: zipCode, cityId: nil, lat: nil, lon: nil, zipCode: "93500", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: false)
+//            self.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct)
+//        }
+//        self.getCountryCodeByZipCode("93500", completion: completion)
+        
+//        let fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: "us", cityId: nil, lat: nil, lon: nil, zipCode: "94040", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: true)
+//        self.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct)
+        
+        let fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: "us", cityId: nil, lat: nil, lon: nil, zipCode: "94040", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: true)
+        self.fetch5daysWeather(fetch5daysOrCurrentCityWeatherStruct)
     
     }
     
@@ -148,12 +155,12 @@ class HomeViewController: BaseViewController {
             SVProgressHUD.dismiss()
             print(json)
             let context = CoreDataApplicationContext.rootSaveContext
-            self.currentCity = CurrentCity.managedObject(JSON: json, withContext: context)
+            //self.currentCity = CurrentCity.managedObject(JSON: json, withContext: context)
             //            let flights: [SM_Flight] = [SM_Flight](withJson: json)
             //            ADPDispatch.async {
             //                success?(flights)
             //            }
-            print("currentCity :\(self.currentCity?.base ?? "") - \(self.currentCity?.currentCityWind?.degrees) ")
+            print("currentCity :\(self.currentCity?.base ?? "") - \(self.currentCity?.currentCityWind?.degrees) - \(self.currentCity?.currentCityWeatherInfo)")
             
             //self.sectionsAvailable = [.city, .main, .sys, .weather, .anotherInfos]
             self.sectionsAvailable = [.sys]
@@ -179,6 +186,41 @@ class HomeViewController: BaseViewController {
         HTTPManager.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct, success: successClosure, failure: failureClosure)
     }
     
+    fileprivate func fetch5daysWeather(_ fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct) {
+        
+        let successClosure: (Any) -> Void = { json in
+            SVProgressHUD.dismiss()
+            print(json)
+            let context = CoreDataApplicationContext.rootSaveContext
+            self.fiveDaysWeather = FewDaysWeather.managedObject(JSON: json, withContext: context)
+            //            let flights: [SM_Flight] = [SM_Flight](withJson: json)
+            //            ADPDispatch.async {
+            //                success?(flights)
+            //            }
+            print("fiveDaysWeather :\(self.fiveDaysWeather?.weatherList)")
+            
+            //self.sectionsAvailable = [.city, .main, .sys, .weather, .anotherInfos]
+            self.sectionsAvailable = [.main]
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
+        }
+        let failureClosure: (HTTPService.HTTPResponseFailureReason) -> () = { reason in
+            print("reason \(reason)")
+            SVProgressHUD.dismiss()
+            //            ADPDispatch.async {
+            //                failure?(reason)
+            //            }
+        }
+        
+        SVProgressHUD.setDefaultStyle(.custom)
+        SVProgressHUD.setDefaultMaskType(.custom)
+        SVProgressHUD.show()
+
+        HTTPManager.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct, success: successClosure, failure: failureClosure)
+    }
+    
     fileprivate var tileSetJSON: JSON? {
         guard let path = Bundle.main.path(forResource: "tileSets", ofType: "json"),
             let string = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else {
@@ -192,9 +234,22 @@ class HomeViewController: BaseViewController {
     
     fileprivate func rowsForSection(_ section: Section) -> [RowItem] {
         switch section {
-//        case .main:
-//            let rows: [RowItem] = [(LocalConstants.companySectionRowID, LocalConstants.companySectionRowID, localizedString("main"), "")]
-//            return rows
+        case .main:
+            var rows: [RowItem] = []
+            guard let fiveDaysWeather = self.fiveDaysWeather else { return rows }
+        
+            let nameRow = RowItem(LocalConstants.customTitleTableViewCellID, LocalConstants.customTitleTableViewCellID, "City", String(fiveDaysWeather.cnt.doubleValue), String(fiveDaysWeather.message))
+            rows.append(nameRow)
+            
+            guard let list = fiveDaysWeather.weatherList else { return rows }
+            
+            list.forEach { (weather) in
+                //TODO
+                let sunRow = RowItem(LocalConstants.customTitleTableViewCellID, LocalConstants.customTitleTableViewCellID, "Sun", "weather", "weather")
+                rows.append(sunRow)
+            }
+            
+            return rows
             
         case .sys:
             var rows: [RowItem] = []
@@ -275,7 +330,9 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sectionItem: Section = self.sectionsAvailable[indexPath.section]
         //let rowItem: RowItem = self.rowsForSection(sectionItem)[indexPath.row]
+        print("sectionItem \(sectionItem)")
         let rowItem: RowItem = self.rowsForSection(sectionItem)[0]
+        
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: rowItem.cellID, for: indexPath)
       
         self.configureCell(cell as! CustomTitleTableViewCell, withItem: rowItem)

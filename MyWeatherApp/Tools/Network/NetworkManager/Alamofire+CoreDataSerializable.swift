@@ -15,3 +15,11 @@ public protocol ResponseManagedObjectSerializable: class {
 public protocol ResponseManagedCollectionSerializable: class {
     static func managedCollection(JSON: Any, withContext: NSManagedObjectContext) -> [Self]
 }
+
+public protocol ResponseManagedObjectWithIdentifierSerializable: class {
+    static func managedObject(JSON: Any, withidentifier: Any, withContext: NSManagedObjectContext) -> Self
+}
+
+public protocol ResponseManagedCollectionWithIdentifierSerializable: class {
+    static func managedCollection(JSON: Any, withidentifier: Any, withContext: NSManagedObjectContext) -> [Self]
+}

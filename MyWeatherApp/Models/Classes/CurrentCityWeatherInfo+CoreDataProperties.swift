@@ -19,6 +19,7 @@ extension CurrentCityWeatherInfo {
     @NSManaged public var discription: String?
     @NSManaged public var icon: String?
     @NSManaged public var currentCity: CurrentCity?
+    @NSManaged public var oneDay: OneDayWeatherInfo?
 
 }
 
@@ -49,3 +50,18 @@ extension CurrentCityWeatherInfo: ResponseManagedObjectSerializable {
         return currentCityWeatherInfo
     }
 }
+
+extension CurrentCityWeatherInfo: ResponseManagedCollectionSerializable {
+    
+    static func managedCollection(JSON json: Any, withContext context: NSManagedObjectContext) -> [CurrentCityWeatherInfo] {
+        var currentCityWeatherInfos: [CurrentCityWeatherInfo] = []
+        let json: JSON = JSON(json)
+        
+        for (_, currentCityWeatherInfoJSON) in json {
+            currentCityWeatherInfos.append(CurrentCityWeatherInfo.managedObject(JSON: currentCityWeatherInfoJSON.object, withContext: context))
+        }
+        
+        return currentCityWeatherInfos
+    }
+}
+

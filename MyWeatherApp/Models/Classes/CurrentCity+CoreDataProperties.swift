@@ -25,9 +25,8 @@ extension CurrentCity {
     @NSManaged public var currentCityCoord: CurrentCityCoord?
     @NSManaged public var currentCityMain: CurrentCityMain?
     @NSManaged public var currentCitySys: CurrentCitySys?
-    @NSManaged public var currentCityWeatherInfo: CurrentCityWeatherInfo?
+    @NSManaged public var currentCityWeatherInfo: NSSet
     @NSManaged public var currentCityWind: CurrentCityWind?
-    
 }
 
 extension CurrentCity: ResponseManagedObjectSerializable {
@@ -63,6 +62,8 @@ extension CurrentCity: ResponseManagedObjectSerializable {
             currentCity.currentCityMain = CurrentCityMain.managedObject(JSON: jsonObject["main"].object, withContext: context)
             currentCity.currentCitySys = CurrentCitySys.managedObject(JSON: jsonObject["sys"].object, withContext: context)
             currentCity.currentCityWind = CurrentCityWind.managedObject(JSON: jsonObject["wind"].object, withContext: context)
+            let currentCityWeatherInfos = CurrentCityWeatherInfo.managedCollection(JSON: jsonObject["weather"].object, withContext: context)
+            currentCity.currentCityWeatherInfo = NSSet(array: currentCityWeatherInfos)
         }
         
         context.mr_saveToPersistentStoreAndWait()
