@@ -22,6 +22,7 @@ class HomeViewController: BaseViewController {
     fileprivate enum Section {
         //case city
         case main
+        case fiveDays
         case sys
         case weather
         case anotherInfos
@@ -31,7 +32,7 @@ class HomeViewController: BaseViewController {
     
     struct LocalConstants {
         static var customTitleTableViewCellID: String               =  "CustomTitleTableViewCellID"
-        static var professionalSituationSectionRowID: String        =  "cell2"
+        static var currentCityCellID: String                        =  "CurrentCityTableViewCellID"
         
         static var companySectionCellHeight: CGFloat                =  70.0
         static var professionalSituationSectionCellHeight: CGFloat  =  70.0
@@ -40,7 +41,8 @@ class HomeViewController: BaseViewController {
         static var avatarSectionCellHeight: CGFloat                 =  148.0
         
         static let showSettingViewControllerSegueID: String         = "showSettingViewControllerSegueID"
-        static let showSearchCountryListViewControllerID: String  = "showSearchCountryListViewControllerID"
+        static let showSearchCountryListViewControllerID: String    = "showSearchCountryListViewControllerID"
+
     }
     
     // MARK: Properties
@@ -86,11 +88,11 @@ class HomeViewController: BaseViewController {
 //        }
 //        self.getCountryCodeByZipCode("93500", completion: completion)
         
-//        let fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: "us", cityId: nil, lat: nil, lon: nil, zipCode: "94040", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: true)
-//        self.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct)
-        
-        let fetch5daysOrCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: "us", cityId: nil, lat: nil, lon: nil, zipCode: "94040", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: true)
-        self.fetch5daysWeather(fetch5daysOrCurrentCityWeatherStruct)
+        self.sectionsAvailable = []
+        let fetchCurrentCityWeatherStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: "us", cityId: nil, lat: nil, lon: nil, zipCode: "94040", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: false)
+        self.fetchCurrentCityWeather(fetchCurrentCityWeatherStruct)
+        let fetch5daysStruct: Fetch5daysOrCurrentCityWeatherStruct = Fetch5daysOrCurrentCityWeatherStruct(cityName: nil, countryCode: "us", cityId: nil, lat: nil, lon: nil, zipCode: "94040", units: Constants.Temperature.Unit.metric.rawValue, isCall5SaysResquest: true)
+        self.fetch5daysWeather(fetch5daysStruct)
     
     }
     
@@ -108,7 +110,6 @@ class HomeViewController: BaseViewController {
         super.viewWillDisappear(animated)
         self.reachability.stopNotifier()
         NotificationCenter.default.removeObserver(self, name: .reachabilityChanged, object: self.reachability)
-        
     }
 
     
@@ -153,9 +154,9 @@ class HomeViewController: BaseViewController {
         
         let successClosure: (Any) -> Void = { json in
             SVProgressHUD.dismiss()
-            print(json)
+            print("currentCityJson \(json) ")
             let context = CoreDataApplicationContext.rootSaveContext
-            //self.currentCity = CurrentCity.managedObject(JSON: json, withContext: context)
+            self.currentCity = CurrentCity.managedObject(JSON: json, withContext: context)
             //            let flights: [SM_Flight] = [SM_Flight](withJson: json)
             //            ADPDispatch.async {
             //                success?(flights)
@@ -163,9 +164,11 @@ class HomeViewController: BaseViewController {
             print("currentCity :\(self.currentCity?.base ?? "") - \(self.currentCity?.currentCityWind?.degrees) - \(self.currentCity?.currentCityWeatherInfo)")
             
             //self.sectionsAvailable = [.city, .main, .sys, .weather, .anotherInfos]
-            self.sectionsAvailable = [.sys]
+            
+            self.sectionsAvailable.insert(.main, at: 0)
             DispatchQueue.main.async {
-                 self.tableView.reloadData()
+                self.navigationItem.title = "\(self.currentCity?.name)(\(self.currentCity?.currentCitySys?.country)"
+                self.tableView.reloadData()
             }
             
         }
@@ -181,8 +184,6 @@ class HomeViewController: BaseViewController {
         SVProgressHUD.setDefaultMaskType(.custom)
         SVProgressHUD.show()
     
-        
-        
         HTTPManager.fetchCurrentCityWeather(fetch5daysOrCurrentCityWeatherStruct, success: successClosure, failure: failureClosure)
     }
     
@@ -200,7 +201,7 @@ class HomeViewController: BaseViewController {
             print("fiveDaysWeather :\(self.fiveDaysWeather?.weatherList)")
             
             //self.sectionsAvailable = [.city, .main, .sys, .weather, .anotherInfos]
-            self.sectionsAvailable = [.main]
+            self.sectionsAvailable.append(.fiveDays)
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -236,23 +237,6 @@ class HomeViewController: BaseViewController {
         switch section {
         case .main:
             var rows: [RowItem] = []
-            guard let fiveDaysWeather = self.fiveDaysWeather else { return rows }
-        
-            let nameRow = RowItem(LocalConstants.customTitleTableViewCellID, LocalConstants.customTitleTableViewCellID, "City", String(fiveDaysWeather.cnt.doubleValue), String(fiveDaysWeather.message))
-            rows.append(nameRow)
-            
-            guard let list = fiveDaysWeather.weatherList else { return rows }
-            
-            list.forEach { (weather) in
-                //TODO
-                let sunRow = RowItem(LocalConstants.customTitleTableViewCellID, LocalConstants.customTitleTableViewCellID, "Sun", "weather", "weather")
-                rows.append(sunRow)
-            }
-            
-            return rows
-            
-        case .sys:
-            var rows: [RowItem] = []
             guard let currentCity = self.currentCity, let sys = currentCity.currentCitySys else { return rows }
             let nameRow = RowItem(LocalConstants.customTitleTableViewCellID, LocalConstants.customTitleTableViewCellID, "City", sys.country, currentCity.name)
             rows.append(nameRow)
@@ -267,6 +251,26 @@ class HomeViewController: BaseViewController {
             rows.append(sunRow)
             
             return rows
+            
+        case .fiveDays:
+            var rows: [RowItem] = []
+            guard let fiveDaysWeather = self.fiveDaysWeather else { return rows }
+        
+            let nameRow = RowItem(LocalConstants.customTitleTableViewCellID, LocalConstants.customTitleTableViewCellID, "City", String(fiveDaysWeather.cnt.doubleValue), String(fiveDaysWeather.message))
+            rows.append(nameRow)
+            
+            guard let list = fiveDaysWeather.weatherList else { return rows }
+            
+            list.forEach { (weather) in
+                if let weather = weather as? OneDayWeatherInfo {
+                    let sunRow = RowItem(LocalConstants.customTitleTableViewCellID, LocalConstants.customTitleTableViewCellID, weather.dt_txt!, weather.oneDayDetail?.city.name, "\(String(describing: weather.oneDayMain?.temp))")
+                    rows.append(sunRow)
+                }
+            }
+            
+            return rows
+            
+        
             
 //        case .weather:
 //            let rows: [RowItem] = [(LocalConstants.companySectionRowID, LocalConstants.companySectionRowID, localizedString("business_membership_mandatory_info"), "")]
@@ -317,22 +321,20 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       let sectionItem: Section = self.sectionsAvailable[section]
+        let sectionItem: Section = self.sectionsAvailable[section]
         return self.numberOfRowForSection(sectionItem)
     }
     
     fileprivate func numberOfRowForSection(_ section: Section) -> Int {
-        //return self.rowsForSection(section).count
-        return 7
+        print("count \(section) \(self.rowsForSection(section).count)")
+        return self.rowsForSection(section).count
     }
 
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sectionItem: Section = self.sectionsAvailable[indexPath.section]
-        //let rowItem: RowItem = self.rowsForSection(sectionItem)[indexPath.row]
+        let rowItem: RowItem = self.rowsForSection(sectionItem)[indexPath.row]
         print("sectionItem \(sectionItem)")
-        let rowItem: RowItem = self.rowsForSection(sectionItem)[0]
-        
+
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: rowItem.cellID, for: indexPath)
       
         self.configureCell(cell as! CustomTitleTableViewCell, withItem: rowItem)

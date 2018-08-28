@@ -61,7 +61,6 @@ extension BaseViewController: UIScrollViewDelegate {
             guard self.isNavigationBarGradient else { return }
             
             let offsetY = scrollView.contentOffset.y
-            print("offsetY \(offsetY)")
             if offsetY >= 0 && offsetY < 64 {
                 let progress = offsetY / 64
                 let themeColor = UIColor.white.withAlphaComponent(progress)

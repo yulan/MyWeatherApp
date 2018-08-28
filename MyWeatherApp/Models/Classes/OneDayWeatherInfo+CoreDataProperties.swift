@@ -16,7 +16,7 @@ extension OneDayWeatherInfo {
         return NSFetchRequest<OneDayWeatherInfo>(entityName: "OneDayWeatherInfo")
     }
 
-    @NSManaged public var dt: String?
+    @NSManaged public var dt: Date
     @NSManaged public var dt_txt: String?
     @NSManaged public var clouds: NSNumber?
     @NSManaged public var rain: NSNumber?
@@ -63,7 +63,7 @@ extension OneDayWeatherInfo: ResponseManagedObjectWithIdentifierSerializable {
         }
         context.performAndWait {
             oneDayWeatherInfo.cityId = id
-            oneDayWeatherInfo.dt = jsonObject["dt"].string
+            oneDayWeatherInfo.dt = Date(timeIntervalSince1970: (jsonObject["dt"].doubleValue))
             oneDayWeatherInfo.dt_txt = jsonObject["dt_txt"].string
             if let clouds = jsonObject["clouds"]["all"].double {
                 oneDayWeatherInfo.clouds = NSNumber(value: clouds)
