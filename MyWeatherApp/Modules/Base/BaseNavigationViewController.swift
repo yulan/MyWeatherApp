@@ -13,6 +13,10 @@ class BaseNavigationViewController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        guard self.navigationBar.subviews.count > 2 else {
+            return
+        }
+        
         self.navigationBar.subviews[0].isHidden = true
         self.navigationBar.subviews[1].alpha = 0
     }
